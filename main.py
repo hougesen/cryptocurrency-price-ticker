@@ -17,50 +17,48 @@ led_states = [False for _ in range(6)]
 
 
 def handler(ch, event):
-    print(ch)
-    print(event)
-    if event == 'press':
-        led_states[ch] = not led_states[ch]
-        touch.set_led(ch, led_states[ch])
-        if led_states[ch]:
-            backlight.set_pixel(ch, 0, 255, 255)
-        else:
-            backlight.set_pixel(ch, 0, 255, 0)
-        backlight.show()
+    # Turn on led
+    switch_led_state(ch)
 
     if (event == "press" and ch == 0):
-        print("button press left top")
+        print("button press left top -> metric backwards",)
         tracker.change_metric("backwards")
 
-        print(ch, "done")
-
     elif (event == "press" and ch == 1):
-        print("button press left middle -> metric forward")
+        print("button press left middle -> metric forward",)
         tracker.change_metric("forward")
-        print(ch, "done")
 
     elif (event == "press" and ch == 2):
-        print("button press left bottom -> metric home")
+        print("button press left bottom -> metric home",)
         tracker.change_metric("home")
-        print(ch, "done")
 
     elif (event == "press" and ch == 3):
-        print("button press bottom page left")
+        print("button press bottom left -> coin backwards",)
+
         tracker.change_page("backwards")
-        print(ch, "done")
 
     elif (event == "press" and ch == 4):
-        print("button press bottom middle -> page home")
+        print("button press bottom middle -> coin home")
         tracker.change_page("home")
-        print(ch, "done")
 
     elif (event == "press" and ch == 5):
-
-        print("button press bottom right -> change primary currency forward")
+        print("button press bottom right -> coin forward")
         tracker.change_page("forward")
-        print(ch, "done")
 
     change_text()
+
+    # Turn off led
+    switch_led_state(ch)
+
+
+def switch_led_state(ch):
+    led_states[ch] = not led_states[ch]
+    touch.set_led(ch, led_states[ch])
+    if led_states[ch]:
+        backlight.set_pixel(ch, 0, 255, 255)
+    else:
+        backlight.set_pixel(ch, 0, 255, 0)
+    backlight.show()
 
 
 def change_text():
@@ -70,13 +68,13 @@ def change_text():
 
     draw = ImageDraw.Draw(image)
 
-    font = ImageFont.truetype(fonts.AmaticSCBold, 16)
+    font = ImageFont.truetype(fonts.PressStart2P, 8)
 
     text = tracker.display_text()
 
-    w, h = font.getsize(text)
+    h = font.getsize(text)[1]
 
-    x = (width - w) // 2
+    x = 0
     y = (height - h) // 2
 
     draw.text((x, y), text, 1, font)
@@ -91,18 +89,13 @@ def change_text():
     lcd.show()
 
 
-# Button led
-for x in range(6):
-    touch.set_led(x, 1)
-    time.sleep(0.1)
-    touch.set_led(x, 0)
-
-# Button
+# Bind buttons to handler
 for x in range(6):
     backlight.set_pixel(x, 0, 255, 0)
     touch.on(x, handler)
 
 
+# Set first text
 change_text()
 
 try:

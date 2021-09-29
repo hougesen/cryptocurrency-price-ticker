@@ -15,7 +15,7 @@ class CoinTracker:
             "change_7d",
             "change_30d",
             "market_cap",
-            "total_volume_24h",
+            "volume_24h",
             "low_24h",
             "high_24h"
         ]
@@ -23,7 +23,6 @@ class CoinTracker:
         self.fetch_current_coin()
 
     # Changes the current coin
-
     def change_page(self, dir):
         if dir == "forward":
             self.current_page += 1
@@ -40,9 +39,7 @@ class CoinTracker:
         print(self.current_page, self.current_coin)
 
     # Changes the shown metric
-
     def change_metric(self, dir):
-        print(dir)
         if dir == "forward":
             self.current_metric_index += 1
             if(self.current_metric_index >= len(self.tracked_metrics)):
@@ -55,9 +52,7 @@ class CoinTracker:
                 self.current_metric_index = len(self.tracked_metrics) - 1
 
     # Fetches coin data for current page
-
     def fetch_current_coin(self):
-
         # Input your own coinlib api key here
         API_KEY = None
 
@@ -81,26 +76,29 @@ class CoinTracker:
             "change_7d": response["delta_7d"],
             "change_30d": response["delta_30d"],
             "market_cap": int(float(response["market_cap"])),
-            "total_volume_24h": int(float(response["total_volume_24h"])),
+            "volume_24h": int(float(response["total_volume_24h"])),
             "low_24h": int(float(response["low_24h"])) if int(float(response["low_24h"])) > 20 else round(float(response["low_24h"]), 2),
             "high_24h": int(float(response["high_24h"])) if int(float(response["high_24h"])) > 20 else round(float(response["high_24h"]), 2)
         }
 
     # Returns the text used by the display
-
     def display_text(self):
+        print(
+            "Current coin: ", self.current_coin["symbol"],
+            "\nCurrent metric: ", self.tracked_metrics[self.current_metric_index]
+        )
+
         if self.tracked_metrics[self.current_metric_index] == "price":
-            return "{coin_symbol} - {value} {currency}".format(
+            return "1 {coin_symbol}:\n{value}{currency}".format(
                 coin_symbol=self.current_coin["symbol"],
                 value=self.current_coin["price"],
                 currency=self.comparison_currency
-            )
-
+            ).upper()
         else:
-            return "{coin_symbol} {metric}: {value}%".format(
+            return "{coin_symbol} {metric}:\n{value}%".format(
                 coin_symbol=self.current_coin["symbol"],
                 metric=self.tracked_metrics[self.current_metric_index].replace(
                    "_", " "
                 ),
                 value=self.current_coin[self.tracked_metrics[self.current_metric_index]]
-            ),
+            ).upper()
