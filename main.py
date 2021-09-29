@@ -1,6 +1,5 @@
 import time
 import signal
-
 from gfxhat import touch, lcd, backlight, fonts
 from PIL import Image, ImageFont, ImageDraw
 from util.CoinTracker import CoinTracker
@@ -10,7 +9,7 @@ from util.CoinTracker import CoinTracker
 tracked_coins = ["BTC", "ETH", "DOGE", "LTC", "BCH"]
 
 # Currency to compare crypto currencies with
-comparison_currency = ["USD", ]
+comparison_currency = "USD"
 
 tracker = CoinTracker(tracked_coins, comparison_currency)
 
