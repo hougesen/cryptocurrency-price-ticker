@@ -10,10 +10,12 @@ class CoinTracker:
         self.fetch_current_coin()
 
     def switch_page(self, dir):
-        if(dir == "forward"):
+        if dir == "forward":
             self.current_page += 1
             if(self.current_page >= len(self.tracked_coins)):
                 self.current_page = 0
+        elif dir == "home":
+            self.current_page = 0
         else:
             self.current_page -= 1
             if(self.current_page < 0):
