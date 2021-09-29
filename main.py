@@ -1,3 +1,7 @@
+import time
+import signal
+
+
 from gfxhat import touch, lcd, backlight, fonts
 from PIL import Image, ImageFont, ImageDraw
 from util.CoinTracker import CoinTracker
@@ -7,7 +11,7 @@ from util.CoinTracker import CoinTracker
 tracked_coins = ["BTC", "ETH", "DOGE", "LTC", "BCH"]
 
 # Array of currencies to compare crypto currencies with
-comparison_currencies = ["DKK", "USD", "BTC"]
+comparison_currencies = ["USD", "DKK", "BTC"]
 
 test = CoinTracker(tracked_coins, comparison_currencies)
 
@@ -36,6 +40,8 @@ draw.text((x, y), text, 1, font)
 
 
 def handler(ch, event):
+    print(ch)
+    print(event)
     if event == 'press':
         led_states[ch] = not led_states[ch]
         touch.set_led(ch, led_states[ch])

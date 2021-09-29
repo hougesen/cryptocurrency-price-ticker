@@ -1,11 +1,11 @@
 import requests
 
 
-def fetch_data(coin: str, comparison_currency: str):
+def fetch_data(coin, comparison_currency):
     # Input your own coinlib api key here
-    API_KEY: str = "12456789"
+    API_KEY = "12456789"
 
-    API_URL: str = "https://coinlib.io/api/v1/coin?key={API_KEY}&pref={comparison_currency}&symbol={coin}".format(
+    API_URL = "https://coinlib.io/api/v1/coin?key={API_KEY}&pref={comparison_currency}&symbol={coin}".format(
         API_KEY=API_KEY, comparison_currency=comparison_currency, coin=coin
     )
 
