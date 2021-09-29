@@ -17,6 +17,7 @@ tracker = CoinTracker(tracked_coins, comparison_currencies)
 
 
 def currentDisplay():
+    print(tracker.current_coin["symbol"], tracker.current_coin["price"])
     return "{coin_symbol} - {coin_price}".format(
         coin_symbol=tracker.current_coin["symbol"], coin_price=tracker.current_coin["price"]
     )
@@ -30,7 +31,7 @@ image = Image.new('P', (width, height))
 
 draw = ImageDraw.Draw(image)
 
-font = ImageFont.truetype(fonts.AmaticSCBold, 38)
+font = ImageFont.truetype(fonts.AmaticSCBold, 16)
 
 text = currentDisplay()
 
@@ -56,24 +57,31 @@ def handler(ch, event):
 
     if (event == "press" and ch == 0):
         print("button press left top")
+        print(ch, "done")
 
     elif (event == "press" and ch == 1):
         print("button press left middle")
+        print(ch, "done")
 
     elif (event == "press" and ch == 2):
         print("button press left bottom")
+        print(ch, "done")
 
     elif (event == "press" and ch == 3):
         print("button press bottom left")
         tracker.switch_page("backwards")
+        print(ch, "done")
 
     elif (event == "press" and ch == 4):
         print("button press bottom middle -> home")
         tracker.switch_page("home")
+        print(ch, "done")
 
     elif (event == "press" and ch == 5):
+
         print("button press bottom right -> change primary currency forward")
         tracker.switch_page("forward")
+        print(ch, "done")
 
     text = currentDisplay()
 

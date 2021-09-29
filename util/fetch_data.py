@@ -15,7 +15,7 @@ def fetch_data(coin, comparison_currency):
         "comparison": response["symbol"] + " to " + comparison_currency,
         "symbol": response["symbol"],
         "name": response["name"],
-        "price": int(response["price"]) + comparison_currency,
+        "price": "{price} {comparison_currency}".format(price=int(float(response["price"])), comparison_currency=comparison_currency),
         "change_1h": response["delta_1h"] + "%",
         "change_24h": response["delta_24h"] + "%",
         "change_7d": response["delta_7d"] + "%",
