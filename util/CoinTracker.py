@@ -36,9 +36,9 @@ class CoinTracker:
                 self.current_page = len(self.tracked_coins) - 1
 
         self.fetch_current_coin()
-        print(self.current_page, self.current_coin)
 
     # Changes the shown metric
+
     def change_metric(self, dir):
         if dir == "forward":
             self.current_metric_index += 1
@@ -57,7 +57,7 @@ class CoinTracker:
         API_KEY = None
 
         if API_KEY == None:
-            print("Missing conlib api key")
+            print("Missing coinlib api key")
 
         API_URL = "https://coinlib.io/api/v1/coin?key={API_KEY}&pref={comparison_currency}&symbol={coin}".format(
             API_KEY=API_KEY,
@@ -84,8 +84,8 @@ class CoinTracker:
     # Returns the text used by the display
     def display_text(self):
         print(
-            "Current coin: ", self.current_coin["symbol"],
-            "\nCurrent metric: ", self.tracked_metrics[self.current_metric_index]
+            "Current coin:", self.current_coin["symbol"],
+            "Current metric:", self.tracked_metrics[self.current_metric_index]
         )
 
         if self.tracked_metrics[self.current_metric_index] == "price":
@@ -94,8 +94,16 @@ class CoinTracker:
                 value=self.current_coin["price"],
                 currency=self.comparison_currency
             ).upper()
-        else:
+        elif "change" in self.tracked_metrics[self.current_metric_index]:
             return "{coin_symbol} {metric}:\n{value}%".format(
+                coin_symbol=self.current_coin["symbol"],
+                metric=self.tracked_metrics[self.current_metric_index].replace(
+                   "_", " "
+                ),
+                value=self.current_coin[self.tracked_metrics[self.current_metric_index]]
+            ).upper()
+        else:
+            return "{coin_symbol} {metric}:\n{value}".format(
                 coin_symbol=self.current_coin["symbol"],
                 metric=self.tracked_metrics[self.current_metric_index].replace(
                    "_", " "

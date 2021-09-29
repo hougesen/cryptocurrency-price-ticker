@@ -16,39 +16,30 @@ tracker = CoinTracker(tracked_coins, comparison_currency)
 led_states = [False for _ in range(6)]
 
 
+# Handle button clicks
 def handler(ch, event):
     # Turn on led
     switch_led_state(ch)
 
     if (event == "press" and ch == 0):
-        print("button press left top -> metric backwards",)
         tracker.change_metric("backwards")
-
     elif (event == "press" and ch == 1):
-        print("button press left middle -> metric forward",)
         tracker.change_metric("forward")
-
     elif (event == "press" and ch == 2):
-        print("button press left bottom -> metric home",)
         tracker.change_metric("home")
-
     elif (event == "press" and ch == 3):
-        print("button press bottom left -> coin backwards",)
-
         tracker.change_page("backwards")
-
     elif (event == "press" and ch == 4):
-        print("button press bottom middle -> coin home")
         tracker.change_page("home")
-
     elif (event == "press" and ch == 5):
-        print("button press bottom right -> coin forward")
         tracker.change_page("forward")
 
     change_text()
 
     # Turn off led
     switch_led_state(ch)
+
+# Switch led_state => !led_state
 
 
 def switch_led_state(ch):
@@ -61,6 +52,7 @@ def switch_led_state(ch):
     backlight.show()
 
 
+# Set text for current coin/metric combination
 def change_text():
     width, height = lcd.dimensions()
 

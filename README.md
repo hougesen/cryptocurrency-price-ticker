@@ -1,3 +1,3 @@
-# crypto-currency-tracker
+# cryptocurrency-price-ticker
 
-Crypto currency tracker for the Raspberry Pi [Pimoroni GFX HAT](https://shop.pimoroni.com/products/gfx-hat)
+Basic cryptocurrency price ticker for the Raspberry Pi [Pimoroni GFX HAT](https://shop.pimoroni.com/products/gfx-hat)
