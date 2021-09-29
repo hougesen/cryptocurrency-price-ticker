@@ -1,6 +1,7 @@
 import requests
 
 
+# Used for keeping track of currecy related data
 class CoinTracker:
     def __init__(self, coins, comparison_currency):
         self.tracked_coins = coins
@@ -12,12 +13,17 @@ class CoinTracker:
             "change_1h",
             "change_24h",
             "change_7d",
-            "change_30d"
+            "change_30d",
+            "market_cap",
+            "total_volume_24h",
+            "low_24h",
+            "high_24h"
         ]
         self.current_metric_index = 0
         self.fetch_current_coin()
 
     # Changes the current coin
+
     def change_page(self, dir):
         if dir == "forward":
             self.current_page += 1
@@ -34,6 +40,7 @@ class CoinTracker:
         print(self.current_page, self.current_coin)
 
     # Changes the shown metric
+
     def change_metric(self, dir):
         print(dir)
         if dir == "forward":
@@ -48,7 +55,9 @@ class CoinTracker:
                 self.current_metric_index = len(self.tracked_metrics) - 1
 
     # Fetches coin data for current page
+
     def fetch_current_coin(self):
+
         # Input your own coinlib api key here
         API_KEY = None
 
@@ -64,27 +73,34 @@ class CoinTracker:
         response = requests.get(API_URL).json()
 
         self.current_coin = {
-            "comparison": response["symbol"] + " to " + self.comparison_currency,
             "symbol": response["symbol"],
             "name": response["name"],
-            "price": "{price} {comparison_currency}".format(
-                price=float(response["price"]),
-                comparison_currency=self.comparison_currency
-            ),
-            "change_1h": response["delta_1h"] + "%",
-            "change_24h": response["delta_24h"] + "%",
-            "change_7d": response["delta_7d"] + "%",
-            "change_30d": response["delta_30d"] + "%"
+            "price": int(float(response["price"])) if int(float(response["price"])) > 20 else round(float(response["price"]), 2),
+            "change_1h": response["delta_1h"],
+            "change_24h": response["delta_24h"],
+            "change_7d": response["delta_7d"],
+            "change_30d": response["delta_30d"],
+            "market_cap": int(float(response["market_cap"])),
+            "total_volume_24h": int(float(response["total_volume_24h"])),
+            "low_24h": int(float(response["low_24h"])) if int(float(response["low_24h"])) > 20 else round(float(response["low_24h"]), 2),
+            "high_24h": int(float(response["high_24h"])) if int(float(response["high_24h"])) > 20 else round(float(response["high_24h"]), 2)
         }
 
     # Returns the text used by the display
 
     def display_text(self):
-        return """
-        {coin_symbol} - {metric}
-        {value}
-        """.format(
-            coin_symbol=self.current_coin["symbol"],
-            metric=self.tracked_metrics[self.current_metric_index],
-            value=self.current_coin[self.tracked_metrics[self.current_metric_index]]
-        )
+        if self.tracked_metrics[self.current_metric_index] == "price":
+            return "{coin_symbol} - {value} {currency}".format(
+                coin_symbol=self.current_coin["symbol"],
+                value=self.current_coin["price"],
+                currency=self.comparison_currency
+            )
+
+        else:
+            return "{coin_symbol} {metric}: {value}%".format(
+                coin_symbol=self.current_coin["symbol"],
+                metric=self.tracked_metrics[self.current_metric_index].replace(
+                   "_", " "
+                ),
+                value=self.current_coin[self.tracked_metrics[self.current_metric_index]]
+            ),
